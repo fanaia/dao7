@@ -2,7 +2,6 @@
 pragma solidity >=0.8.0 <0.9.0;
 
 import "./Banking.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract Token is Banking {
     // Os tokens sao sempre vinculados com contratos e esses com data de liquidacao;

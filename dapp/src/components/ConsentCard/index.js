@@ -1,8 +1,12 @@
 import { useMetaMask } from "metamask-react";
 import { useContext, useEffect, useState } from "react";
 import { ContractDAO7Context } from "../../contexts/ContractDAO7";
+import Loading from "../layout/loading";
 
 function ConsentCard(props) {
+  const [viewLoadingConsent, setViewLoadingConsent] = useState(true);
+  const [viewLoadingResult, setViewLoadingResult] = useState(true);
+  const [viewLoadingVotar, setViewLoadingVotar] = useState(false);
   const { account } = useMetaMask();
   const { contract } = useContext(ContractDAO7Context);
   const [consent, setConsent] = useState({});
@@ -34,6 +38,8 @@ function ConsentCard(props) {
     votacao.dataRegistro = dataRegistro.toLocaleDateString();
 
     setConsent(votacao);
+
+    setViewLoadingConsent(false);
   }
 
   async function loadResult() {
@@ -42,20 +48,26 @@ function ConsentCard(props) {
 
     const votado = await contract.methods.JaVotou(props.index, account).call();
     setVotado(votado);
+
+    setViewLoadingResult(false);
   }
 
   function votar(aceitar) {
+    setViewLoadingVotar(true);
+
     contract.methods
       .Votar(props.index, aceitar)
       .send({ from: account })
       .once("receipt", (receipt) => {
         loadResult();
+        setViewLoadingVotar(false);
       });
   }
 
   return (
     <div>
       <hr />
+      {viewLoadingConsent && <Loading />}
       <div>ownerVotacao: {consent.ownerVotacao}</div>
       <div>titulo: {consent.titulo}</div>
       <div>descricao: {consent.descricao}</div>
@@ -67,6 +79,7 @@ function ConsentCard(props) {
         peso: {tokensSocio}/{tokensTotal} ({(100 * tokensSocio) / tokensTotal}%)
       </div>
       <hr />
+      {viewLoadingResult && <Loading />}
       <div>finalizada: {result.finalizada && result.finalizada.toString()}</div>
       <div>resultado: {result.resultado && result.resultado.toString()}</div>
       <div>votosAprovacao: {result.votosAprovacao / 100}%</div>
@@ -79,6 +92,7 @@ function ConsentCard(props) {
         Aceitar
       </button>
       {votado && "Votado!"}
+      {viewLoadingVotar && <Loading />}
       <hr />
     </div>
   );

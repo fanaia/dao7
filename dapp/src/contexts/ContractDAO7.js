@@ -12,11 +12,14 @@ export const ContractDAO7Provider = (props) => {
   }, []);
 
   async function loadBlockchainData() {
-    const chainID = "80001";
-    // const chainID = "1337";
-
     const web3 = new Web3(Web3.givenProvider);
-    const contrato = await new web3.eth.Contract(contratoDAO7.abi, contratoDAO7.networks[chainID].address);
+    // web3.eth.defaultChain = "80001";
+    web3.eth.defaultChain = "1337";
+
+    const contrato = await new web3.eth.Contract(
+      contratoDAO7.abi,
+      contratoDAO7.networks[web3.eth.defaultChain].address
+    );
 
     setContract(contrato);
   }

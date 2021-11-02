@@ -1,10 +1,12 @@
 import { useMetaMask } from "metamask-react";
 import { useContext, useEffect, useState } from "react";
 import { ContractDAO7Context } from "../../contexts/ContractDAO7";
+import Loading from "../layout/loading";
 
 function PartnerCard(props) {
   const { account } = useMetaMask();
   const { contract } = useContext(ContractDAO7Context);
+  const [viewLoadingEfetivar, setViewLoadingEfetivar] = useState(false);
   const [partner, setPartner] = useState({});
   const [tokens, setTokens] = useState({});
 
@@ -27,11 +29,13 @@ function PartnerCard(props) {
   }
 
   function efetivar() {
+    setViewLoadingEfetivar(true);
     contract.methods
       .EfetivarVotacaoSocio(props.index)
       .send({ from: account })
       .once("receipt", (receipt) => {
         loadPartner();
+        setViewLoadingEfetivar(false);
       });
   }
 
@@ -52,6 +56,7 @@ function PartnerCard(props) {
       <button disabled={partner.status == 1 ? false : true} onClick={efetivar}>
         Efetivar
       </button>
+      {viewLoadingEfetivar && <Loading />}
       <hr />
     </div>
   );

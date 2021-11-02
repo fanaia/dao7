@@ -31,9 +31,12 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div>{{ status } === "notConnected" ? <button onClick={connect}>Conectar</button> : `Status: ${status}`}</div>
+      <div>
+        Status: {status} {status === "notConnected" && <button onClick={connect}>Conectar</button>}
+      </div>
       <div>Account: {account}</div>
-      <div>Contract: {contract && contract._address}</div>
+      <div>ChainID: {contract && contract.defaultChain} </div>
+      <div>Contract: {contract && contract._address} </div>
       <Navbar />
       <Switch>
         <Route path="/" exact component={Home} />

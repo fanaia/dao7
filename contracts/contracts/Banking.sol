@@ -5,11 +5,10 @@ import "./Partner.sol";
 
 contract Banking is Partner {
     enum statusMovimentacaoFinanceira {
-        recusado,
-        aceito,
         pendenteVotacao,
-        cancelado,
-        efetivado
+        pendenteEfetivacao,
+        ativo,
+        recusado
     }
 
     enum tipoMovimentacaoFinanceira {
@@ -55,12 +54,11 @@ contract Banking is Partner {
         pure
         returns (string memory)
     {
-        string[5] memory stringToEnum = [
-            "recusado",
-            "aceito",
+        string[4] memory stringToEnum = [
             "pendenteVotacao",
-            "cancelado",
-            "efetivado"
+            "pendenteEfetivacao",
+            "ativo",
+            "recusado"
         ];
         return stringToEnum[index];
     }
@@ -229,9 +227,25 @@ contract Banking is Partner {
     }
 
     function EfetivarLancamento(uint256 index) public returns (bool) {
+        (bool finalizada, bool resultado, , ) = GetResultadoVotacao(
+            movimentacaoFinanceiraVotacao[index]
+        );
+
+        if (
+            movimentacoesFinanceira[index].status ==
+            statusMovimentacaoFinanceira.pendenteVotacao &&
+            finalizada == true
+        ) {
+            if (resultado == true) {
+                movimentacoesFinanceira[index]
+                    .status = statusMovimentacaoFinanceira.ativo;
+            } else {
+                movimentacoesFinanceira[index]
+                    .status = statusMovimentacaoFinanceira.recusado;
+            }
+        }
+
         (, uint256 indexSocioEfetivacao) = GetIndexSocioByAddress(msg.sender);
-        movimentacoesFinanceira[index].status = statusMovimentacaoFinanceira
-            .efetivado;
         movimentacoesFinanceira[index]
             .indexSocioEfetivacao = indexSocioEfetivacao;
         movimentacoesFinanceira[index].dataEfetivacao = block.timestamp;
