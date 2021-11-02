@@ -1,0 +1,816 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "addressSocio",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "quantidadeTokens",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dataLiquidacao",
+						"type": "uint256"
+					}
+				],
+				"name": "AddContratoToken",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "enum Banking.tipoMovimentacaoFinanceira",
+						"name": "tipo",
+						"type": "uint8"
+					},
+					{
+						"internalType": "string",
+						"name": "titulo",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "descricao",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "valor",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "conta",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dataVencimento",
+						"type": "uint256"
+					}
+				],
+				"name": "AddMovimentacaoFinanceira",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "addressSocio",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "nome",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "email",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "conta",
+						"type": "string"
+					}
+				],
+				"name": "AddSocio",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "EfetivarLancamento",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "EfetivarVotacaoSocio",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "EfetivarVotacaoToken",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "GetContratoToken",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "indexSocio",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "quantidadeTokens",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "quantidadeTokensRestante",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dataLiquidacao",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dataRegistro",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum Token.statusContratoToken",
+						"name": "status",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "GetContratosToken",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "GetCotacaoToken",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "cotacao",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "GetEnumStatusMovimentacaoFinanceira",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "GetEnumTipoMovimentacaoFinanceira",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "GetMovimentacaoFinanceira",
+				"outputs": [
+					{
+						"internalType": "enum Banking.statusMovimentacaoFinanceira",
+						"name": "status",
+						"type": "uint8"
+					},
+					{
+						"internalType": "enum Banking.tipoMovimentacaoFinanceira",
+						"name": "tipo",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "indexSocioInclusao",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "indexSocioEfetivacao",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "titulo",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "descricao",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "valor",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "conta",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dataVencimento",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dataEfetivacao",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dataRegistro",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "GetMovimentacoesFinanceira",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "GetMovimentacoesFinanceirasPendentesEfetivacao",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "GetPropostaVotacao",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "ownerVotacao",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "titulo",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "descricao",
+						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "tags",
+						"type": "string[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dataTermino",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dataRegistro",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "GetResultadoVotacao",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "finalizada",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "resultado",
+						"type": "bool"
+					},
+					{
+						"internalType": "uint256",
+						"name": "votosAprovacao",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "votosReprovacao",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "GetSaldoFundoTokens",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "valor",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "GetSocio",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "indexSocioIndicacao",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "addressSocio",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "nome",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "email",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "conta",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dataRegistro",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum Partner.statusSocio",
+						"name": "status",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "GetSocios",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "addressSocio",
+						"type": "address"
+					}
+				],
+				"name": "GetTokensPorSocio",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "total",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "liberados",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "addressSocio",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "data",
+						"type": "uint256"
+					}
+				],
+				"name": "GetTokensPorSocioPorData",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "total",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "GetTotalTokens",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "total",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "liberados",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "data",
+						"type": "uint256"
+					}
+				],
+				"name": "GetTotalTokensPorData",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "total",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "GetVotacoesAbertas",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "_votacoes",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "addressSocio",
+						"type": "address"
+					}
+				],
+				"name": "JaVotou",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "votado",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "quantidadeDesejada",
+						"type": "uint256"
+					}
+				],
+				"name": "LiquidarToken",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "quantidadeLiquidada",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "valorLiquidado",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "addressSocio",
+						"type": "address"
+					}
+				],
+				"name": "SocioAtivo",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "socioAtivo",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "SociosPendentes",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "voto",
+						"type": "bool"
+					}
+				],
+				"name": "Votar",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_i",
+						"type": "uint256"
+					}
+				],
+				"name": "uintToString",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "_uintAsString",
+						"type": "string"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"DAO7.sol": "DAO7"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"Banking.sol": {
+			"keccak256": "0x064c2c4c1702904857d139d59b848c9339d858c6be019bb41d4ad85b958b4d24",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7d28a3a02e7d9023d72c292eb9dc87f3ebb5ed7e49de87e50dd5bada0082fa09",
+				"dweb:/ipfs/Qmag3kycZRx9acTBApegHrDBRa99YZGTP3DufQmsgB2J5m"
+			]
+		},
+		"Consent.sol": {
+			"keccak256": "0xe952504dac0c7bc6bce219ec8cc3213f1eafaf2918f03c5283273c908f96c540",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ceda0253c1e71749792024b57273690ab9fdf7187e0dae693280625c73d7f43d",
+				"dweb:/ipfs/QmVJqVz1eqxjeFJqUa7hWzUK5sVX5FeBF14BuTVSnt12TU"
+			]
+		},
+		"DAO7.sol": {
+			"keccak256": "0xf7c22cf519b048dec8cdc835e36ac2b4315162729abe52d061cd65c68a67358f",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1e21ad72c1cb5c148677ed10f01352f175013c5cbc3e1ce5f1c337ed1f016216",
+				"dweb:/ipfs/QmP9K2TqW68GqrsSrqufFChK7yYYATNf7eHTUoHtrzg96S"
+			]
+		},
+		"Partner.sol": {
+			"keccak256": "0x943b9f0c7a6c0608fbb0dce79e4ab9f46dfa8804c128ae39bce90c7b4f211b81",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://e850c6344d3f2aa8d2be24e2a456467d0cfee313698378c9165cb234c14fa21e",
+				"dweb:/ipfs/QmVofmwWLLQ9J5nBroNQuEQPGvQACr7LtqYyRLeQnLCVFo"
+			]
+		},
+		"Project.sol": {
+			"keccak256": "0xd9cce558d64a84826bf771f38e03cdc6d37796971c8cf48c8231c9b3bf1a4457",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://05a087348d4522fd6329f853ff367be742c21aedec1f973976313b2d74f53d39",
+				"dweb:/ipfs/QmTPLmU9YcT98vd74Bf2SgxzwjMncSpPgDEcPNssM1b2kt"
+			]
+		},
+		"Token.sol": {
+			"keccak256": "0x3e9dababfd3b465b2cb782a190e4e8e7040c2ac55c2e9ba1a93dffec8af17246",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6eb64b1df96fe10c9d5b0fdfe4ca07bc1c06f01f0fab3b739d0da7ad52acdc29",
+				"dweb:/ipfs/QmSehuB4K1A41tGHHHakqJcUuafGGhte3AzG2xwSQcVe6d"
+			]
+		},
+		"Utils.sol": {
+			"keccak256": "0x2c4ecb4c218b9ec8f4991ff8a725f2277df0a5b069a5c6607df79fadd867f537",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7ea982a6e514deb6ed4329552cdf2173aab363a27967f2b2fe2476a1480ecd8b",
+				"dweb:/ipfs/QmbB7n8PBFWt41F1seiUAHiNAUmF7gXoqYadCjY1yGwV6G"
+			]
+		}
+	},
+	"version": 1
+}
