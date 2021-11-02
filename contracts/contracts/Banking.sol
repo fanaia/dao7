@@ -30,8 +30,8 @@ contract Banking is Partner {
         uint256 dataRegistro;
     }
 
-    MovimentacaoFinanceira[] movimentacoesFinanceira;
-    mapping(uint256 => uint256) movimentacaoFinanceiraVotacao; // index movimentacoesFinanceira[] => index votacoes[]
+    MovimentacaoFinanceira[] movimentacoesFinanceiras;
+    mapping(uint256 => uint256) votacoesMovimentacoesFinanceiras; // index movimentacoesFinanceiras[] => index votacoes[]
     uint256 saldoFinanceiro;
 
     uint256 private prazoVotacao;
@@ -91,8 +91,8 @@ contract Banking is Partner {
             dataEfetivacao: 0,
             dataRegistro: block.timestamp
         });
-        movimentacoesFinanceira.push(mv);
-        index = movimentacoesFinanceira.length - 1;
+        movimentacoesFinanceiras.push(mv);
+        index = movimentacoesFinanceiras.length - 1;
 
         AddPropostaVotacaoMovimentacaoFinanceira(index);
 
@@ -105,7 +105,7 @@ contract Banking is Partner {
     }
 
     function AddPropostaVotacaoMovimentacaoFinanceira(uint256 index) private {
-        MovimentacaoFinanceira memory mv = movimentacoesFinanceira[index];
+        MovimentacaoFinanceira memory mv = movimentacoesFinanceiras[index];
 
         string memory titulo = string(
             abi.encodePacked("Movimentacao financeira: ", mv.titulo)
@@ -126,7 +126,7 @@ contract Banking is Partner {
             tags,
             dataTermino
         );
-        movimentacaoFinanceiraVotacao[index] = indexVotacao;
+        votacoesMovimentacoesFinanceiras[index] = indexVotacao;
     }
 
     function GetMovimentacaoFinanceira(uint256 index)
@@ -146,7 +146,16 @@ contract Banking is Partner {
             uint256 dataRegistro
         )
     {
-        MovimentacaoFinanceira memory mv = movimentacoesFinanceira[index];
+        MovimentacaoFinanceira memory mv = movimentacoesFinanceiras[index];
+        uint256 indexVotacao = votacoesMovimentacoesFinanceiras[index];
+
+        if (mv.status == statusMovimentacaoFinanceira.pendenteVotacao) {
+            (bool finalizada, , , ) = Consent.GetResultadoVotacao(indexVotacao);
+
+            if (finalizada == true) {
+                mv.status = statusMovimentacaoFinanceira.pendenteEfetivacao;
+            }
+        }
 
         return (
             mv.status,
@@ -169,10 +178,10 @@ contract Banking is Partner {
         returns (uint256[] memory)
     {
         uint256[] memory arrayIndex = new uint256[](
-            movimentacoesFinanceira.length
+            movimentacoesFinanceiras.length
         );
 
-        for (uint256 i; i < movimentacoesFinanceira.length; i++) {
+        for (uint256 i; i < movimentacoesFinanceiras.length; i++) {
             arrayIndex[i] = i;
         }
 
@@ -190,13 +199,13 @@ contract Banking is Partner {
         uint256 tamanhoArray = 0;
         uint256[] memory arrayTemp;
 
-        for (uint256 i; i < movimentacoesFinanceira.length; i++) {
+        for (uint256 i; i < movimentacoesFinanceiras.length; i++) {
             if (
-                movimentacoesFinanceira[i].status ==
+                movimentacoesFinanceiras[i].status ==
                 statusMovimentacaoFinanceira.pendenteVotacao
             ) {
                 (bool finalizada, , , ) = GetResultadoVotacao(
-                    movimentacaoFinanceiraVotacao[i]
+                    votacoesMovimentacoesFinanceiras[i]
                 );
 
                 if (finalizada == true) {
@@ -207,13 +216,13 @@ contract Banking is Partner {
 
         arrayTemp = new uint256[](tamanhoArray);
 
-        for (uint256 i; i < movimentacoesFinanceira.length; i++) {
+        for (uint256 i; i < movimentacoesFinanceiras.length; i++) {
             if (
-                movimentacoesFinanceira[i].status ==
+                movimentacoesFinanceiras[i].status ==
                 statusMovimentacaoFinanceira.pendenteVotacao
             ) {
                 (bool finalizada, , , ) = GetResultadoVotacao(
-                    movimentacaoFinanceiraVotacao[i]
+                    votacoesMovimentacoesFinanceiras[i]
                 );
 
                 if (finalizada == true) {
@@ -228,27 +237,27 @@ contract Banking is Partner {
 
     function EfetivarLancamento(uint256 index) public returns (bool) {
         (bool finalizada, bool resultado, , ) = GetResultadoVotacao(
-            movimentacaoFinanceiraVotacao[index]
+            votacoesMovimentacoesFinanceiras[index]
         );
 
         if (
-            movimentacoesFinanceira[index].status ==
+            movimentacoesFinanceiras[index].status ==
             statusMovimentacaoFinanceira.pendenteVotacao &&
             finalizada == true
         ) {
             if (resultado == true) {
-                movimentacoesFinanceira[index]
+                movimentacoesFinanceiras[index]
                     .status = statusMovimentacaoFinanceira.ativo;
             } else {
-                movimentacoesFinanceira[index]
+                movimentacoesFinanceiras[index]
                     .status = statusMovimentacaoFinanceira.recusado;
             }
         }
 
         (, uint256 indexSocioEfetivacao) = GetIndexSocioByAddress(msg.sender);
-        movimentacoesFinanceira[index]
+        movimentacoesFinanceiras[index]
             .indexSocioEfetivacao = indexSocioEfetivacao;
-        movimentacoesFinanceira[index].dataEfetivacao = block.timestamp;
+        movimentacoesFinanceiras[index].dataEfetivacao = block.timestamp;
 
         return true;
     }

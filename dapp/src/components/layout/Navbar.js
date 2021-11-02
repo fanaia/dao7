@@ -17,7 +17,7 @@ function Navbar() {
           <Link to="/tokens">Tokens</Link>
         </li>
         <li>
-          <Link to="/movimentacaoFinanceira">Movimentação Financeira</Link>
+          <Link to="/movimentacoesFinanceiras">Movimentações Financeiras</Link>
         </li>
       </ul>
       <hr />
