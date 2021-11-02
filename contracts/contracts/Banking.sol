@@ -95,13 +95,6 @@ contract Banking is Partner {
         index = movimentacoesFinanceiras.length - 1;
 
         AddPropostaVotacaoMovimentacaoFinanceira(index);
-
-        //Temporário
-        if (tipo == tipoMovimentacaoFinanceira.pagar) {
-            saldoFinanceiro = saldoFinanceiro - valor;
-        } else {
-            saldoFinanceiro = saldoFinanceiro + valor;
-        }
     }
 
     function AddPropostaVotacaoMovimentacaoFinanceira(uint256 index) private {
@@ -188,8 +181,6 @@ contract Banking is Partner {
         return arrayIndex;
     }
 
-    // GetLancamentosPendentesVotacao
-
     function GetMovimentacoesFinanceirasPendentesEfetivacao()
         public
         view
@@ -252,13 +243,30 @@ contract Banking is Partner {
                 movimentacoesFinanceiras[index]
                     .status = statusMovimentacaoFinanceira.recusado;
             }
+
+            (, uint256 indexSocioEfetivacao) = GetIndexSocioByAddress(
+                msg.sender
+            );
+            movimentacoesFinanceiras[index]
+                .indexSocioEfetivacao = indexSocioEfetivacao;
+            movimentacoesFinanceiras[index].dataEfetivacao = block.timestamp;
+
+            if (
+                movimentacoesFinanceiras[index].tipo ==
+                tipoMovimentacaoFinanceira.pagar
+            ) {
+                saldoFinanceiro =
+                    saldoFinanceiro -
+                    movimentacoesFinanceiras[index].valor;
+            } else {
+                saldoFinanceiro =
+                    saldoFinanceiro +
+                    movimentacoesFinanceiras[index].valor;
+            }
+
+            return true;
         }
 
-        (, uint256 indexSocioEfetivacao) = GetIndexSocioByAddress(msg.sender);
-        movimentacoesFinanceiras[index]
-            .indexSocioEfetivacao = indexSocioEfetivacao;
-        movimentacoesFinanceiras[index].dataEfetivacao = block.timestamp;
-
-        return true;
+        return false;
     }
 }

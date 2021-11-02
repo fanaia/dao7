@@ -143,10 +143,10 @@ contract Token is Banking {
 
         cotacao = (100 * saldo) / liberados;
         if (cotacao < cotacaoMinima) {
-            cotacao = cotacaoMinima;
+            return cotacaoMinima / 100;
         }
 
-        return cotacao;
+        return cotacao / 100;
     }
 
     function AddContratoToken(

@@ -17,10 +17,10 @@ function TokenCard(props) {
     const contratoToken = await contract.methods.GetContratoToken(props.index).call();
 
     const dataLiquidacao = new Date(contratoToken.dataLiquidacao * 1000);
-    contratoToken.dataLiquidacao = dataLiquidacao.toLocaleDateString();
+    contratoToken.dataLiquidacao = dataLiquidacao.toLocaleString();
 
     const dataRegistro = new Date(contratoToken.dataRegistro * 1000);
-    contratoToken.dataRegistro = dataRegistro.toLocaleDateString();
+    contratoToken.dataRegistro = dataRegistro.toLocaleString();
 
     setToken(contratoToken);
   }

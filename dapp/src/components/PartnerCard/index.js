@@ -20,7 +20,7 @@ function PartnerCard(props) {
     const socio = await contract.methods.GetSocio(props.index).call();
 
     const dataRegistro = new Date(socio.dataRegistro * 1000);
-    socio.dataRegistro = dataRegistro.toLocaleDateString();
+    socio.dataRegistro = dataRegistro.toLocaleString();
 
     setPartner(socio);
 

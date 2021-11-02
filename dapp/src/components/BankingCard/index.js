@@ -19,13 +19,13 @@ function BankingCard(props) {
     const movimentacaoFinanceira = await contract.methods.GetMovimentacaoFinanceira(props.index).call();
 
     const dataVencimento = new Date(movimentacaoFinanceira.dataVencimento * 1000);
-    movimentacaoFinanceira.dataVencimento = dataVencimento.toLocaleDateString();
+    movimentacaoFinanceira.dataVencimento = dataVencimento.toLocaleString();
 
     const dataEfetivacao = new Date(movimentacaoFinanceira.dataEfetivacao * 1000);
-    movimentacaoFinanceira.dataEfetivacao = dataEfetivacao.toLocaleDateString();
+    movimentacaoFinanceira.dataEfetivacao = dataEfetivacao.toLocaleString();
 
     const dataRegistro = new Date(movimentacaoFinanceira.dataRegistro * 1000);
-    movimentacaoFinanceira.dataRegistro = dataRegistro.toLocaleDateString();
+    movimentacaoFinanceira.dataRegistro = dataRegistro.toLocaleString();
 
     setBanking(movimentacaoFinanceira);
   }

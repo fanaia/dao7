@@ -32,10 +32,10 @@ function ConsentCard(props) {
     setTokensSocio(_tokensSocio);
 
     const dataTermino = new Date(votacao.dataTermino * 1000);
-    votacao.dataTermino = dataTermino.toLocaleDateString();
+    votacao.dataTermino = dataTermino.toLocaleString();
 
     const dataRegistro = new Date(votacao.dataRegistro * 1000);
-    votacao.dataRegistro = dataRegistro.toLocaleDateString();
+    votacao.dataRegistro = dataRegistro.toLocaleString();
 
     setConsent(votacao);
 
