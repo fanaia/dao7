@@ -14,6 +14,7 @@ import AdicionarTokens from "./pages/AdicionarTokens";
 import MovimentacoesFinanceiras from "./pages/MovimentacoesFinanceiras";
 import AdicionarMovimentacaoFinanceira from "./pages/AdicionarMovimentacaoFinanceira";
 import { useMetaMask } from "metamask-react";
+import LiquidarTokens from "./pages/LiquidarTokens";
 
 function App() {
   const { status, connect, account } = useMetaMask();
@@ -46,6 +47,7 @@ function App() {
         <Route path="/adicionarSocio" component={AdicionarSocio} />
         <Route path="/tokens" component={Tokens} />
         <Route path="/adicionarTokens" component={AdicionarTokens} />
+        <Route path="/liquidarTokens" component={LiquidarTokens} />
         <Route path="/movimentacoesFinanceiras" component={MovimentacoesFinanceiras} />
         <Route path="/adicionarMovimentacaoFinanceira" component={AdicionarMovimentacaoFinanceira} />
       </Switch>

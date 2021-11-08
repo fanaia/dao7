@@ -40,13 +40,14 @@ contract Token is Banking {
         cotacaoMinima = 3000;
         prazoVotacao = 3 days;
 
+        uint256 data = block.timestamp;
         contratosToken.push(
             ContratoToken({
                 indexSocio: 0,
                 quantidadeTokens: 1,
                 quantidadeTokensRestante: 1,
-                dataLiquidacao: block.timestamp,
-                dataRegistro: block.timestamp,
+                dataLiquidacao: data,
+                dataRegistro: data,
                 status: statusContratoToken.ativo
             })
         );
@@ -141,12 +142,12 @@ contract Token is Banking {
         (, uint256 liberados) = GetTotalTokens();
         uint256 saldo = GetSaldoFundoTokens();
 
-        cotacao = (100 * saldo) / liberados;
+        cotacao = saldo / liberados;
         if (cotacao < cotacaoMinima) {
-            return cotacaoMinima / 100;
+            return cotacaoMinima;
         }
 
-        return cotacao / 100;
+        return cotacao;
     }
 
     function AddContratoToken(
@@ -199,17 +200,18 @@ contract Token is Banking {
 
     function definirProximo(uint256 index) private returns (uint256 posicao) {
         uint256 indexAnterior = 0;
-        uint256 indexProximo = proximoContrato[indexAnterior];
+        uint256 indexProximo = proximoContrato[0];
         posicao = 1;
 
         while (true) {
             posicao++;
 
             if (
+                indexProximo == 0 ||
                 (contratosToken[indexAnterior].dataLiquidacao <
                     contratosToken[index].dataLiquidacao &&
                     contratosToken[indexProximo].dataLiquidacao >
-                    contratosToken[index].dataLiquidacao) || indexProximo == 0
+                    contratosToken[index].dataLiquidacao)
             ) {
                 proximoContrato[indexAnterior] = index;
                 proximoContrato[index] = indexProximo;
@@ -234,9 +236,15 @@ contract Token is Banking {
 
         uint256 cotacaoToken = GetCotacaoToken();
         uint256 saldoFinanceiro = GetSaldoFundoTokens();
-        uint256 quantidadeDisponiveis = (100 * saldoFinanceiro) / cotacaoToken;
+        uint256 quantidadeDisponiveis = saldoFinanceiro / cotacaoToken;
         uint256 quantidadePendente = 0;
         quantidadeLiquidada = 0;
+
+        if (quantidadeDesejada > quantidadeDisponiveis) {
+            quantidadeDesejada = quantidadeDisponiveis;
+        }
+
+        quantidadePendente = quantidadeDesejada;
 
         while (
             quantidadeDisponiveis > 0 &&
@@ -247,14 +255,8 @@ contract Token is Banking {
             index = proximoContrato[index];
 
             if (contratosToken[index].indexSocio == indexSocio) {
-                quantidadePendente = quantidadeDesejada - quantidadeLiquidada;
-
-                if (quantidadeDisponiveis < quantidadePendente) {
-                    quantidadePendente = quantidadeDisponiveis;
-                }
-
                 if (
-                    contratosToken[index].quantidadeTokensRestante >
+                    contratosToken[index].quantidadeTokensRestante >=
                     quantidadePendente
                 ) {
                     contratosToken[index].quantidadeTokensRestante =
@@ -264,9 +266,9 @@ contract Token is Banking {
                     quantidadeLiquidada =
                         quantidadeLiquidada +
                         quantidadePendente;
-                    quantidadeDisponiveis =
-                        quantidadeDisponiveis -
-                        quantidadePendente;
+                    // quantidadeDisponiveis =
+                    //     quantidadeDisponiveis -
+                    //     quantidadePendente;
                 } else {
                     quantidadeLiquidada =
                         quantidadeLiquidada +
@@ -286,20 +288,22 @@ contract Token is Banking {
             }
         }
 
-        valorLiquidado = (quantidadeLiquidada * cotacaoToken) / 100;
-        PagamentoTokensLiquidados(valorLiquidado);
+        valorLiquidado = (quantidadeLiquidada * cotacaoToken);
+
+        if (valorLiquidado > 0) {
+            PagamentoTokensLiquidados(valorLiquidado);
+        }
 
         return (quantidadeLiquidada, valorLiquidado);
     }
 
     function PagamentoTokensLiquidados(uint256 valorLiquidado) private {
-        AddMovimentacaoFinanceira(
+        AddMovimentacaoFinanceiraDireta(
             tipoMovimentacaoFinanceira.pagar,
             "Liquidacao de Token",
             "",
             valorLiquidado,
-            "conta",
-            block.timestamp
+            "conta"
         );
     }
 

@@ -68,6 +68,47 @@ contract Banking is Partner {
         return saldoFinanceiro;
     }
 
+    function AddMovimentacaoFinanceiraDireta(
+        tipoMovimentacaoFinanceira tipo,
+        string memory titulo,
+        string memory descricao,
+        uint256 valor,
+        string memory conta
+    ) internal returns (uint256 index) {
+        (, uint256 indexSocioInclusao) = GetIndexSocioByAddress(msg.sender);
+
+        uint256 data = block.timestamp;
+
+        MovimentacaoFinanceira memory mv = MovimentacaoFinanceira({
+            status: statusMovimentacaoFinanceira.ativo,
+            tipo: tipo,
+            indexSocioInclusao: indexSocioInclusao,
+            indexSocioEfetivacao: 2,
+            titulo: titulo,
+            descricao: descricao,
+            valor: valor,
+            conta: conta,
+            dataVencimento: data,
+            dataEfetivacao: data,
+            dataRegistro: data
+        });
+        movimentacoesFinanceiras.push(mv);
+        index = movimentacoesFinanceiras.length - 1;
+
+        if (
+            movimentacoesFinanceiras[index].tipo ==
+            tipoMovimentacaoFinanceira.pagar
+        ) {
+            saldoFinanceiro =
+                saldoFinanceiro -
+                movimentacoesFinanceiras[index].valor;
+        } else {
+            saldoFinanceiro =
+                saldoFinanceiro +
+                movimentacoesFinanceiras[index].valor;
+        }
+    }
+
     function AddMovimentacaoFinanceira(
         tipoMovimentacaoFinanceira tipo,
         string memory titulo,

@@ -13,8 +13,9 @@ export const ContractDAO7Provider = (props) => {
 
   async function loadBlockchainData() {
     const web3 = new Web3(Web3.givenProvider);
-    // web3.eth.defaultChain = "80001";
-    web3.eth.defaultChain = "1337";
+    web3.eth.defaultChain = "80001"; // Mumbai
+    // web3.eth.defaultChain = "1337"; //Ganache
+    // web3.eth.defaultChain = "137"; //Polygon
 
     const contrato = await new web3.eth.Contract(
       contratoDAO7.abi,

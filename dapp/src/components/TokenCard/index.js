@@ -30,6 +30,7 @@ function TokenCard(props) {
       .EfetivarVotacaoToken(props.index)
       .send({ from: account })
       .once("receipt", (receipt) => {
+        console.log(receipt);
         loadToken();
       });
   }

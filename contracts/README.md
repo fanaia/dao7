@@ -1,5 +1,5 @@
-truffle deploy --network maticmainnet
+truffle deploy --network polygon
 
-truffle deploy --network maticmumbai
+truffle deploy --network mumbai
 
 truffle deploy --network ganache
