@@ -1,10 +1,10 @@
 //SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
-import "./Banking.sol";
+import "./Financeiro.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-contract Token is Banking {
+contract Token is Financeiro {
     // Os tokens sao sempre vinculados com contratos e esses com data de liquidacao;
     // Os tokens tem um valor mínimo;
     // Caso não tenha saldo suficiente para liquidar todos os contratos já liberados, segue a "fila" conforme a data de liquidação
@@ -56,13 +56,13 @@ contract Token is Banking {
 
     function AddPropostaVotacaoToken(uint256 index) private {
         ContratoToken memory contrato = contratosToken[index];
-        (, , string memory nomeSocio, , , , ) = Partner.GetSocio(
+        (, , string memory nomeSocio, , , , ) = Sociedade.GetSocio(
             contrato.indexSocio
         );
-        (, uint256 indexSocioInclusao) = Partner.GetIndexSocioByAddress(
+        (, uint256 indexSocioInclusao) = Sociedade.GetIndexSocioByAddress(
             msg.sender
         );
-        (, , string memory nomeSocioInclusao, , , , ) = Partner.GetSocio(
+        (, , string memory nomeSocioInclusao, , , , ) = Sociedade.GetSocio(
             indexSocioInclusao
         );
 
@@ -156,7 +156,7 @@ contract Token is Banking {
         uint256 dataLiquidacao
     ) public returns (uint256 index) {
         require(
-            Partner.SocioAtivo(addressSocio) == true,
+            Sociedade.SocioAtivo(addressSocio) == true,
             "Apenas socios podem receber tokens!"
         );
 

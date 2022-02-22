@@ -1,9 +1,9 @@
 //SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
-import "./Consent.sol";
+import "./Consenso.sol";
 
-contract Partner is Consent {
+contract Sociedade is Consenso {
     enum statusSocio {
         pendenteVotacao,
         pendenteEfetivacao,

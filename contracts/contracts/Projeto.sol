@@ -3,4 +3,4 @@ pragma solidity >=0.8.0 <0.9.0;
 
 import "./Token.sol";
 
-contract Project is Token { }
+contract Projeto is Token { }

@@ -1,9 +1,9 @@
 //SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
-import "./Partner.sol";
+import "./Sociedade.sol";
 
-contract Banking is Partner {
+contract Financeiro is Sociedade {
     enum statusMovimentacaoFinanceira {
         pendenteVotacao,
         pendenteEfetivacao,
@@ -184,7 +184,7 @@ contract Banking is Partner {
         uint256 indexVotacao = votacoesMovimentacoesFinanceiras[index];
 
         if (mv.status == statusMovimentacaoFinanceira.pendenteVotacao) {
-            (bool finalizada, , , ) = Consent.GetResultadoVotacao(indexVotacao);
+            (bool finalizada, , , ) = Consenso.GetResultadoVotacao(indexVotacao);
 
             if (finalizada == true) {
                 mv.status = statusMovimentacaoFinanceira.pendenteEfetivacao;
