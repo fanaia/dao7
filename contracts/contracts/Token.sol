@@ -22,8 +22,6 @@ contract Token is Financeiro {
     struct ContratoToken {
         uint256 indexSocio;
         uint256 quantidadeTokens;
-        uint256 quantidadeTokensRestante;
-        uint256 dataLiquidacao;
         uint256 dataRegistro;
         statusContratoToken status;
     }
@@ -31,13 +29,12 @@ contract Token is Financeiro {
     uint256 cotacaoMinima;
 
     ContratoToken[] private contratosToken;
-    mapping(uint256 => uint256) private proximoContrato;
     mapping(uint256 => uint256) votacoesContratos; //index Socio / index Votacao
 
     uint256 private prazoVotacao;
 
     constructor() {
-        cotacaoMinima = 3000;
+        cotacaoMinima = 2000;
         prazoVotacao = 3 days;
 
         uint256 data = block.timestamp;
@@ -45,8 +42,6 @@ contract Token is Financeiro {
             ContratoToken({
                 indexSocio: 0,
                 quantidadeTokens: 1,
-                quantidadeTokensRestante: 1,
-                dataLiquidacao: data,
                 dataRegistro: data,
                 status: statusContratoToken.ativo
             })
@@ -79,7 +74,7 @@ contract Token is Financeiro {
         string memory detalhe;
         string[] memory tags = new string[](2);
         tags[0] = "token";
-        tags[1] = "addToken";
+        tags[1] = "novo";
 
         uint256 dataTermino = contrato.dataRegistro + prazoVotacao;
 
@@ -110,8 +105,6 @@ contract Token is Financeiro {
         returns (
             uint256 indexSocio,
             uint256 quantidadeTokens,
-            uint256 quantidadeTokensRestante,
-            uint256 dataLiquidacao,
             uint256 dataRegistro,
             statusContratoToken status
         )
@@ -131,8 +124,6 @@ contract Token is Financeiro {
         return (
             indexSocio = contratoToken.indexSocio,
             quantidadeTokens = contratoToken.quantidadeTokens,
-            quantidadeTokensRestante = contratoToken.quantidadeTokensRestante,
-            dataLiquidacao = contratoToken.dataLiquidacao,
             dataRegistro = contratoToken.dataRegistro,
             status = contratoToken.status
         );
@@ -152,9 +143,8 @@ contract Token is Financeiro {
 
     function AddContratoToken(
         address addressSocio,
-        uint256 quantidadeTokens,
-        uint256 dataLiquidacao
-    ) public returns (uint256 index) {
+        uint256 quantidadeTokens
+    ) private returns (uint256 index) {
         require(
             Sociedade.SocioAtivo(addressSocio) == true,
             "Apenas socios podem receber tokens!"
@@ -166,8 +156,6 @@ contract Token is Financeiro {
             ContratoToken({
                 indexSocio: indexSocio,
                 quantidadeTokens: quantidadeTokens,
-                quantidadeTokensRestante: quantidadeTokens,
-                dataLiquidacao: dataLiquidacao,
                 dataRegistro: block.timestamp,
                 status: statusContratoToken.pendenteVotacao
             })
@@ -191,207 +179,99 @@ contract Token is Financeiro {
         ) {
             if (resultado == true) {
                 contratosToken[index].status = statusContratoToken.ativo;
-                definirProximo(index);
+                
+                //Transfere os Tokens ERC20 para o Sócio
             } else {
                 contratosToken[index].status = statusContratoToken.recusado;
             }
         }
     }
 
-    function definirProximo(uint256 index) private returns (uint256 posicao) {
-        uint256 indexAnterior = 0;
-        uint256 indexProximo = proximoContrato[0];
-        posicao = 1;
+    // function GetTokensPorSocio(address addressSocio)
+    //     public
+    //     view
+    //     returns (uint256 total, uint256 liberados)
+    // {
+    //     (, uint256 indexSocio) = GetIndexSocioByAddress(addressSocio);
+    //     total = 0;
+    //     liberados = 0;
 
-        while (true) {
-            posicao++;
+    //     for (uint256 i = 0; i < contratosToken.length; i++) {
+    //         if (
+    //             contratosToken[i].indexSocio == indexSocio &&
+    //             contratosToken[i].status == statusContratoToken.ativo
+    //         ) {
+    //             total = total + contratosToken[i].quantidadeTokensRestante;
+    //             if (contratosToken[i].dataLiquidacao < block.timestamp) {
+    //                 liberados =
+    //                     liberados +
+    //                     contratosToken[i].quantidadeTokensRestante;
+    //             }
+    //         }
+    //     }
 
-            if (
-                indexProximo == 0 ||
-                (contratosToken[indexAnterior].dataLiquidacao <
-                    contratosToken[index].dataLiquidacao &&
-                    contratosToken[indexProximo].dataLiquidacao >
-                    contratosToken[index].dataLiquidacao)
-            ) {
-                proximoContrato[indexAnterior] = index;
-                proximoContrato[index] = indexProximo;
+    //     return (total, liberados);
+    // }
 
-                return posicao;
-            } else {
-                indexAnterior = indexProximo;
-                indexProximo = proximoContrato[indexAnterior];
-            }
-        }
+    // function GetTokensPorSocioPorData(address addressSocio, uint256 data)
+    //     public
+    //     view
+    //     returns (uint256 total)
+    // {
+    //     (, uint256 indexSocio) = GetIndexSocioByAddress(addressSocio);
+    //     total = 0;
 
-        return posicao;
-    }
+    //     for (uint256 i = 0; i < contratosToken.length; i++) {
+    //         if (
+    //             contratosToken[i].indexSocio == indexSocio &&
+    //             contratosToken[i].status == statusContratoToken.ativo &&
+    //             contratosToken[i].dataRegistro < data
+    //         ) {
+    //             total = total + contratosToken[i].quantidadeTokensRestante;
+    //         }
+    //     }
 
-    function LiquidarToken(uint256 quantidadeDesejada)
-        public
-        returns (uint256 quantidadeLiquidada, uint256 valorLiquidado)
-    {
-        (, uint256 indexSocio) = GetIndexSocioByAddress(msg.sender);
-        uint256 index = 0;
-        uint256 indexAnterior = 0;
+    //     return (total);
+    // }
 
-        uint256 cotacaoToken = GetCotacaoToken();
-        uint256 saldoFinanceiro = GetSaldoFundoTokens();
-        uint256 quantidadeDisponiveis = saldoFinanceiro / cotacaoToken;
-        uint256 quantidadePendente = 0;
-        quantidadeLiquidada = 0;
+    // function GetTotalTokens()
+    //     public
+    //     view
+    //     returns (uint256 total, uint256 liberados)
+    // {
+    //     total = 0;
+    //     liberados = 0;
 
-        if (quantidadeDesejada > quantidadeDisponiveis) {
-            quantidadeDesejada = quantidadeDisponiveis;
-        }
+    //     for (uint256 i = 0; i < contratosToken.length; i++) {
+    //         if (contratosToken[i].status == statusContratoToken.ativo) {
+    //             total = total + contratosToken[i].quantidadeTokensRestante;
+    //             if (contratosToken[i].dataLiquidacao < block.timestamp) {
+    //                 liberados =
+    //                     liberados +
+    //                     contratosToken[i].quantidadeTokensRestante;
+    //             }
+    //         }
+    //     }
 
-        quantidadePendente = quantidadeDesejada;
+    //     return (total, liberados);
+    // }
 
-        while (
-            quantidadeDisponiveis > 0 &&
-            quantidadeLiquidada < quantidadeDesejada &&
-            proximoContrato[index] > 0
-        ) {
-            indexAnterior = index;
-            index = proximoContrato[index];
+    // function GetTotalTokensPorData(uint256 data)
+    //     public
+    //     view
+    //     returns (uint256 total)
+    // {
+    //     total = 0;
 
-            if (contratosToken[index].indexSocio == indexSocio) {
-                if (
-                    contratosToken[index].quantidadeTokensRestante >=
-                    quantidadePendente
-                ) {
-                    contratosToken[index].quantidadeTokensRestante =
-                        contratosToken[index].quantidadeTokensRestante -
-                        quantidadePendente;
+    //     for (uint256 i = 0; i < contratosToken.length; i++) {
+    //         if (
+    //             contratosToken[i].status == statusContratoToken.ativo &&
+    //             contratosToken[i].dataRegistro < data
+    //         ) {
+    //             total = total + contratosToken[i].quantidadeTokensRestante;
+    //         }
+    //     }
 
-                    quantidadeLiquidada =
-                        quantidadeLiquidada +
-                        quantidadePendente;
-                    // quantidadeDisponiveis =
-                    //     quantidadeDisponiveis -
-                    //     quantidadePendente;
-                } else {
-                    quantidadeLiquidada =
-                        quantidadeLiquidada +
-                        contratosToken[index].quantidadeTokensRestante;
-                    quantidadeDisponiveis =
-                        quantidadeDisponiveis -
-                        contratosToken[index].quantidadeTokensRestante;
-
-                    contratosToken[index].quantidadeTokensRestante = 0;
-                    proximoContrato[indexAnterior] = proximoContrato[index];
-                    delete proximoContrato[index];
-                }
-            } else {
-                quantidadeDisponiveis =
-                    quantidadeDisponiveis -
-                    contratosToken[index].quantidadeTokensRestante;
-            }
-        }
-
-        valorLiquidado = (quantidadeLiquidada * cotacaoToken);
-
-        if (valorLiquidado > 0) {
-            PagamentoTokensLiquidados(valorLiquidado);
-        }
-
-        return (quantidadeLiquidada, valorLiquidado);
-    }
-
-    function PagamentoTokensLiquidados(uint256 valorLiquidado) private {
-        AddMovimentacaoFinanceiraDireta(
-            tipoMovimentacaoFinanceira.pagar,
-            "Liquidacao de Token",
-            "",
-            valorLiquidado,
-            "conta"
-        );
-    }
-
-    function GetTokensPorSocio(address addressSocio)
-        public
-        view
-        returns (uint256 total, uint256 liberados)
-    {
-        (, uint256 indexSocio) = GetIndexSocioByAddress(addressSocio);
-        total = 0;
-        liberados = 0;
-
-        for (uint256 i = 0; i < contratosToken.length; i++) {
-            if (
-                contratosToken[i].indexSocio == indexSocio &&
-                contratosToken[i].status == statusContratoToken.ativo
-            ) {
-                total = total + contratosToken[i].quantidadeTokensRestante;
-                if (contratosToken[i].dataLiquidacao < block.timestamp) {
-                    liberados =
-                        liberados +
-                        contratosToken[i].quantidadeTokensRestante;
-                }
-            }
-        }
-
-        return (total, liberados);
-    }
-
-    function GetTokensPorSocioPorData(address addressSocio, uint256 data)
-        public
-        view
-        returns (uint256 total)
-    {
-        (, uint256 indexSocio) = GetIndexSocioByAddress(addressSocio);
-        total = 0;
-
-        for (uint256 i = 0; i < contratosToken.length; i++) {
-            if (
-                contratosToken[i].indexSocio == indexSocio &&
-                contratosToken[i].status == statusContratoToken.ativo &&
-                contratosToken[i].dataRegistro < data
-            ) {
-                total = total + contratosToken[i].quantidadeTokensRestante;
-            }
-        }
-
-        return (total);
-    }
-
-    function GetTotalTokens()
-        public
-        view
-        returns (uint256 total, uint256 liberados)
-    {
-        total = 0;
-        liberados = 0;
-
-        for (uint256 i = 0; i < contratosToken.length; i++) {
-            if (contratosToken[i].status == statusContratoToken.ativo) {
-                total = total + contratosToken[i].quantidadeTokensRestante;
-                if (contratosToken[i].dataLiquidacao < block.timestamp) {
-                    liberados =
-                        liberados +
-                        contratosToken[i].quantidadeTokensRestante;
-                }
-            }
-        }
-
-        return (total, liberados);
-    }
-
-    function GetTotalTokensPorData(uint256 data)
-        public
-        view
-        returns (uint256 total)
-    {
-        total = 0;
-
-        for (uint256 i = 0; i < contratosToken.length; i++) {
-            if (
-                contratosToken[i].status == statusContratoToken.ativo &&
-                contratosToken[i].dataRegistro < data
-            ) {
-                total = total + contratosToken[i].quantidadeTokensRestante;
-            }
-        }
-
-        return (total);
-    }
+    //     return (total);
+    // }
 }

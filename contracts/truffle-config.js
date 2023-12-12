@@ -11,7 +11,7 @@ module.exports = {
     ganache: {
       host: "localhost",
       port: 7545,
-      network_id: "5777",
+      network_id: "1337",
     },
     polygon: {
       provider: function () {
@@ -24,6 +24,7 @@ module.exports = {
         return new HDWalletProvider(mnemonic, rpcUrlPolygonMumbai);
       },
       network_id: "80001",
+      networkCheckTimeout: 999999, 
     },
   },
   compilers: {

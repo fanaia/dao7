@@ -17,7 +17,7 @@ contract Sociedade is Consenso {
         address addressSocio;
         string nome;
         string email;
-        string conta;
+        string telefone;
         uint256 dataRegistro;
         statusSocio status;
     }
@@ -43,7 +43,7 @@ contract Sociedade is Consenso {
             addressSocio: msg.sender,
             nome: "owner",
             email: "",
-            conta: "",
+            telefone: "",
             dataRegistro: block.timestamp,
             status: statusSocio.ativo
         });
@@ -54,7 +54,7 @@ contract Sociedade is Consenso {
         address addressSocio,
         string memory nome,
         string memory email,
-        string memory conta
+        string memory telefone
     ) public {
         require(
             SocioAtivo(msg.sender) == true,
@@ -68,7 +68,7 @@ contract Sociedade is Consenso {
             addressSocio: addressSocio,
             nome: nome,
             email: email,
-            conta: conta,
+            telefone: telefone,
             dataRegistro: block.timestamp,
             status: statusSocio.pendenteVotacao
         });
@@ -115,8 +115,8 @@ contract Sociedade is Consenso {
         );
         string memory detalhe;
         string[] memory tags = new string[](2);
-        tags[0] = "partner";
-        tags[1] = "addSocio";
+        tags[0] = "sociedade";
+        tags[1] = "novo";
 
         uint256 dataTermino = socios[index].dataRegistro + prazoVotacao;
 
@@ -225,7 +225,7 @@ contract Sociedade is Consenso {
             socio.addressSocio,
             socio.nome,
             socio.email,
-            socio.conta,
+            socio.telefone,
             socio.dataRegistro,
             socio.status
         );
